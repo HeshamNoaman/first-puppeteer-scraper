@@ -11,6 +11,8 @@ async function getQuotes() {
 
     const { browser, page } = await startBrowserAndPage(pageURL, allowedTypes);
 
+    let allQuotes = [];
+
     // Loop to get quotes until there are no more next buttons
     while (isRemainPage) {
         // Get page data
@@ -32,20 +34,25 @@ async function getQuotes() {
 
         });
 
-        // Display the quotes
-        console.log(quotes);
-
-        // Click next button
-        await page.waitForSelector(nextBtnSelector);
-        await page.click(nextBtnSelector);
+        // save the result in array
+        allQuotes = allQuotes.concat(quotes);
 
         // Check if there is a next button
         const nextBtn = await page.$(nextBtnSelector);
         isRemainPage = !!nextBtn;
         console.log("next btn: ", nextBtn, " is remain: ", isRemainPage);
+
+        if (!isRemainPage) { break }
+
+        // Click next button
+        await page.waitForSelector(nextBtnSelector);
+        await page.click(nextBtnSelector);
     }
 
     console.log("complete loop now exit");
+    console.log(allQuotes);
+    console.log("the length is: ", allQuotes.length);
+
     // Close the browser
     await browser.close();
 };

@@ -16,7 +16,7 @@ async function startBrowserAndPage(pageURL, allowedResourceTypes) {
     const page = await browser.newPage();
 
     // Call the function to optimize page load
-    await optimizePageLoad(page, allowedResourceTypes);
+    // await optimizePageLoad(page, allowedResourceTypes);
 
     // Navigate to the signIn page
     await page.goto(pageURL, { waitUntil: "domcontentloaded" });
