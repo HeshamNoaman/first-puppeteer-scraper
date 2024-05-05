@@ -16,13 +16,20 @@ async function startBrowserAndPage(pageURL, allowedResourceTypes) {
     const page = await browser.newPage();
 
     // Call the function to optimize page load
-    // await optimizePageLoad(page, allowedResourceTypes);
+    await optimizePageLoad(page, allowedResourceTypes);
 
     // Navigate to the signIn page
     await page.goto(pageURL, { waitUntil: "domcontentloaded" });
 
     return { browser, page };
 }
+
+/*
+possible value for allowedResourceTypes
+"script" | "image" | "font" | "document" | "stylesheet" | "media" | "texttrack" | "xhr" | 
+"fetch" | "prefetch" | "eventsource" | "websocket" | "manifest" | "signedexchange" | 
+"ping" | "cspviolationreport" | "preflight" | "other"
+*/
 
 // for optimizing load of page
 async function optimizePageLoad(page, allowedResourceTypes) {

@@ -37,16 +37,32 @@ async function getQuotes() {
         // save the result in array
         allQuotes = allQuotes.concat(quotes);
 
+        // or use the following instead
+        /*
         // Check if there is a next button
-        const nextBtn = await page.$(nextBtnSelector);
-        isRemainPage = !!nextBtn;
-        console.log("next btn: ", nextBtn, " is remain: ", isRemainPage);
+        try {
+            await page.waitForSelector(nextBtnSelector);
+        } catch (error) {
+            // If next button not found, set isRemainPage to false
+            isRemainPage = false;
+            console.log("Next button not found. Exiting loop.");
+            break;
+        }
+
+        // Click next button
+        await page.click(nextBtnSelector);
+        */
+
+        // ************ another way ************
+        // Check if there is a next button
+        isRemainPage = !!(await page.$(nextBtnSelector));
 
         if (!isRemainPage) { break }
 
         // Click next button
         await page.waitForSelector(nextBtnSelector);
         await page.click(nextBtnSelector);
+        // **************************
     }
 
     console.log("complete loop now exit");
