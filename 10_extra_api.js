@@ -46,20 +46,20 @@ function extractData(result) {
             number: indexNo,
             indexTime: item.indexTime,
             productName: item.nameAr,
-            // priceAfterDiscount: item.price,
-            // originalPrice: item.wasPrice || "",
-            // available: true,
-            // url: domain + item.urlAr,
-            // photo: item.productMediaUrls[0],
-            // description: item.productFeaturesAr,
+            priceAfterDiscount: item.price,
+            originalPrice: item.wasPrice || "",
+            available: true,
+            url: domain + item.urlAr,
+            photo: item.productMediaUrls[0],
+            description: item.productFeaturesAr,
         });
 
     });
 }
 
-async function fetchCurrentPageData(body) {
+async function fetchCurrentPageData() {
     try {
-        const response = await axios.post(url, body);
+        const response = await axios.post(url, data);
 
         // get the data from the response
         const response_data = response.data.results[0];
@@ -94,11 +94,10 @@ async function run() {
         // Update the page value in the request parameters
         data.requests[0].params = data.requests[0].params.replace(/page=\d+/, `page=${currentPage}`);
 
-        
-        console.log('data are: ' + data.requests[0].params);
         console.log('Loading ....................');
+
         // call the function to make a request
-        await fetchCurrentPageData(data);
+        await fetchCurrentPageData();
 
         // Add a delay between fetches
         await wait(1000);
@@ -107,7 +106,7 @@ async function run() {
 
 
 // get the first request data
-await fetchCurrentPageData(data);
+await fetchCurrentPageData();
 console.log(`Number of Hits are ${nbHits}`);
 
 // get the rest of the data
