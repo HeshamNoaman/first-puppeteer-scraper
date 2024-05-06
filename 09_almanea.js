@@ -6,7 +6,6 @@ const selectors = {
     img: 'img',
     originalPrice: '.product-text-content .text-zinc-400 > span',
     priceAfterDiscount: '.product-text-content .text-red > span',
-    footerSection: 'footer.bg-black',
     descriptionLists: 'div > ul > li > div.hidden div.grid',
     descriptionKey: 'div.rounded-sm',
     descriptionValue: 'div:nth-child(2).rounded-sm',
@@ -81,7 +80,8 @@ async function getProductDetails(page, products) {
                 const key = list.querySelector(selectors.descriptionKey).textContent;
                 const value = list.querySelector(selectors.descriptionValue).textContent;
 
-                return { key, value };
+                // return { key, value };
+                return `${key}: ${value}`;
             });
 
         }, selectors)
