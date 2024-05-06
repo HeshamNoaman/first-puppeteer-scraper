@@ -6,8 +6,13 @@ const selectors = {
     img: 'img',
     originalPrice: '.product-text-content .text-zinc-400 > span',
     priceAfterDiscount: '.product-text-content .text-red > span',
-    footerSection: 'footer.bg-black'
+    footerSection: 'footer.bg-black',
+    descriptionLists: 'div > ul > li > div.hidden div.grid',
+    descriptionKey: 'div.rounded-sm',
+    descriptionValue: 'div:nth-child(2).rounded-sm',
+
 };
+
 
 // Function to scroll to the bottom of the page
 async function autoScroll(page, waitTime) {
@@ -57,12 +62,38 @@ async function scrapeLazyLoadedElements(page, scrollDelay) {
 
     }, selectors);
 
+    // go to each product url and get product details
+    await getProductDetails(page, allProduct);
+
     return allProduct;
 };
 
+async function getProductDetails(page, products) {
+
+    for (const product of products) {
+
+        await page.goto(product.url, { waitUntil: "domcontentloaded", timeout: 60000 });
+
+        const descriptionLists = await page.$$eval(selectors.descriptionLists, (lists, selectors) => {
+
+            return lists.map(list => {
+
+                const key = list.querySelector(selectors.descriptionKey).textContent;
+                const value = list.querySelector(selectors.descriptionValue).textContent;
+
+                return { key, value };
+            });
+
+        }, selectors)
+
+        product.description = descriptionLists;
+
+    }
+}
+
 
 const pageURL = "https://www.almanea.sa/mobiles-tablets-c-7423/mobiles-c-7424";
-const allowedTypes = ['document', 'stylesheet', 'script', "xhr"];
+const allowedTypes = ['document', 'script', "xhr"];
 
 const { browser, page } = await startBrowserAndPage(pageURL, allowedTypes, true);
 const scrollDelay = 100;
