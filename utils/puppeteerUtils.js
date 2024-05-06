@@ -4,22 +4,33 @@ import readline from "readline";
 
 
 // for stating puppeteer browser and page
-async function startBrowserAndPage(pageURL, allowedResourceTypes) {
-    // Start a puppeteer session
-    const browser = await puppeteer.launch({
+async function startBrowserAndPage(pageURL, allowedResourceTypes = null, useUserDataDir = false) {
+
+    // Set the launch opt
+    const launchOptions = {
         headless: false,
-        defaultViewport: null,
-        // userDataDir: './data' // to cache data
-    });
+        defaultViewport: null
+    };
+
+    // Set the userDataDir
+    if (useUserDataDir) {
+        launchOptions.userDataDir = './data'; // to cache data
+    }
+
+    // Start a puppeteer session
+    const browser = await puppeteer.launch(launchOptions);
 
     // Open a new page
     const page = await browser.newPage();
 
     // Call the function to optimize page load
-    await optimizePageLoad(page, allowedResourceTypes);
+    if (allowedResourceTypes) {
+        await optimizePageLoad(page, allowedResourceTypes);
+    }
 
     // Navigate to the signIn page
-    await page.goto(pageURL, { waitUntil: "domcontentloaded" });
+    // , { waitUntil: "domcontentloaded" }
+    await page.goto(pageURL);
 
     return { browser, page };
 }
@@ -64,5 +75,9 @@ const getUserInput = async () => {
     });
 };
 
+function wait(ms) {
+    return new Promise(resolve => setTimeout(() => resolve(), ms));
+}
 
-export { startBrowserAndPage, optimizePageLoad, saveToJson, getUserInput };
+
+export { startBrowserAndPage, optimizePageLoad, saveToJson, getUserInput, wait };
