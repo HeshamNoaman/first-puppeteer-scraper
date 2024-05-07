@@ -68,9 +68,9 @@ const getUserInput = async () => {
     });
 
     return new Promise((resolve) => {
-        rl.question('Enter the code: ', (code) => {
+        rl.question('Enter the text: ', (text) => {
             rl.close();
-            resolve(code);
+            resolve(text);
         });
     });
 };

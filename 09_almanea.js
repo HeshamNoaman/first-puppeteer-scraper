@@ -4,7 +4,7 @@ import { insertProducts } from "./utils/mongooseUtils.js";
 const selectors = {
     productLists: 'div.grid.grid-cols-12.gap-4 > div .text-zinc-700',
     title: '.product-text-content > a',
-    img: 'img',
+    img: 'div > div.relative > div.relative > img',
     originalPrice: '.product-text-content .text-zinc-400 > span',
     priceAfterDiscount: '.product-text-content .text-red > span',
     descriptionLists: 'div > ul > li > div.hidden div.grid',

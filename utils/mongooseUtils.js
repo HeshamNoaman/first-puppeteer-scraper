@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
 import Product from "./product.js";
 
-import auth from "../output/config.js";
+// for remote uri provide your url
+import uri from "../output/config.js";
 
 // local uri
 const localUri = 'mongodb://localhost:27017';
-
-// for remote uri provide your it here
-const uri = `mongodb+srv://:${auth}:${auth}@myatlasclusteredu.tizay0s.mongodb.net/?retryWrites=true&w=majority&appName=myAtlasClusterEDU`
 
 const options = {
     dbName: 'productDB', // Specify the database name
@@ -34,5 +32,30 @@ const insertProducts = async (products) => {
     }
 }
 
+// to search for product by its name
+const searchProductsByName = async (productName) => {
+    try {
+        // connect to mongodb
+        await mongoose.connect(uri, options);
 
-export { insertProducts }
+        // Use a regular expression to perform a case-insensitive search
+        const regex = new RegExp(productName, 'i');
+        const products = await Product.find({ productName: regex }).sort({ price: 1 });
+
+
+        return products;
+
+    } catch (error) {
+        console.error('Error searching for products:', error.message);
+        throw error;
+    } finally {
+        // Close the MongoDB connection
+        mongoose.connection.close();
+    }
+
+}
+
+
+
+
+export { insertProducts, searchProductsByName }
