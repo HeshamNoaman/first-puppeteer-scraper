@@ -1,4 +1,5 @@
 import { startBrowserAndPage, saveToJson } from './utils/puppeteerUtils.js';
+import { insertProducts } from "./utils/mongooseUtils.js";
 
 const selectors = {
     productLists: 'div.grid.grid-cols-12.gap-4 > div .text-zinc-700',
@@ -53,8 +54,8 @@ async function scrapeLazyLoadedElements(page, scrollDelay) {
                 productName: product.querySelector(selectors.title).textContent,
                 url: 'https://www.almanea.sa' + product.querySelector(selectors.title).getAttribute('href'),
                 photo: product.querySelector(selectors.img).getAttribute('src'),
-                originalPrice: originalPrice ? originalPrice.textContent : null,
-                priceAfterDiscount: product.querySelector(selectors.priceAfterDiscount).textContent,
+                price: product.querySelector(selectors.priceAfterDiscount).textContent,
+                wasPrice: originalPrice ? originalPrice.textContent : null,
             };
 
         })
@@ -100,11 +101,15 @@ const scrollDelay = 100;
 
 await scrapeLazyLoadedElements(page, scrollDelay)
     .then((data) => {
-        // display number of saved item
-        console.log('total saved items is:', data.length);
+        // display number of scrapped item
+        console.log('total scrapped items is:', data.length);
 
         // save the content to json file
         saveToJson(data, './output/almanea_product.json');
+
+        // save data to mongodb
+        insertProducts(data);
+
     })
     .catch(error => {
         console.error('Error:', error);

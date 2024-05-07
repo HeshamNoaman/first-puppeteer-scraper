@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { saveToJson, wait } from './utils/puppeteerUtils.js';
+import { insertProducts } from "./utils/mongooseUtils.js";
 
 const apiKey = 'af1b13cfdc69ebf18c5980f2c6afff4d';
 const appId = 'ML6PM6JWSI';
 const algoliaAgent = 'Algolia%20for%20JavaScript%20(4.5.1)%3B%20Browser%20(lite)';
+
+// the website url: https://www.extra.com/ar-sa/mobiles-tablets/mobiles/smartphone/c/2-212-3/facet/?q=:relevance:inStock:true&text=&pageSize=48&pg=2&sort=relevance
 
 const url = `https://ml6pm6jwsi-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=${algoliaAgent}&x-algolia-api-key=${apiKey}&x-algolia-application-id=${appId}`;
 
@@ -40,18 +43,16 @@ function extractData(result) {
     // add data to extracted_info array
     result.hits.forEach((item) => {
 
-        let indexNo = extracted_info.length + 1;
+        const descriptionArray = Object.entries(item.productFeaturesAr).map(([key, value]) => `${key}: ${value}`);
 
         extracted_info.push({
-            number: indexNo,
-            indexTime: item.indexTime,
             productName: item.nameAr,
-            priceAfterDiscount: item.price,
-            originalPrice: item.wasPrice || "",
+            price: item.price,
+            wasPrice: item.wasPrice || null,
             available: true,
             url: domain + item.urlAr,
             photo: item.productMediaUrls[0],
-            description: item.productFeaturesAr,
+            description: descriptionArray,
         });
 
     });
@@ -114,3 +115,6 @@ await run();
 
 // save the modified response to json file
 saveToJson(extracted_info, './output/extra_product_organized.json');
+
+// save data to mongodb
+insertProducts(extracted_info);

@@ -79,5 +79,5 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(() => resolve(), ms));
 }
 
-
+// name export multiple var and function and should when import use the same name
 export { startBrowserAndPage, optimizePageLoad, saveToJson, getUserInput, wait };
