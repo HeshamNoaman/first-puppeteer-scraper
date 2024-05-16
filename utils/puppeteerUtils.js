@@ -9,7 +9,17 @@ async function startBrowserAndPage(pageURL, allowedResourceTypes = null, useUser
     // Set the launch opt
     const launchOptions = {
         headless: false,
-        defaultViewport: null
+        defaultViewport: null,
+        // for deployment args
+        arguments: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu',
+        ]
     };
 
     // Set the userDataDir
@@ -30,6 +40,8 @@ async function startBrowserAndPage(pageURL, allowedResourceTypes = null, useUser
 
     // Navigate to the signIn page
     // , { waitUntil: "domcontentloaded" }
+    // to get cookies correctly add this
+    // , { waitUntil: "networkidle0" } 
     await page.goto(pageURL);
 
     return { browser, page };
@@ -61,6 +73,15 @@ function saveToJson(data, filePath) {
     console.log("all items have been successfully saved in", filePath, "file");
 }
 
+// Write the HTML content to a file
+function saveToHtmlFile(content, filePath) {
+
+    fs.writeFile(filePath, content, (err) => {
+        if (err) throw err;
+        console.log('HTML file created successfully.');
+    });
+}
+
 const getUserInput = async () => {
     const rl = readline.createInterface({
         input: process.stdin,
@@ -80,4 +101,4 @@ function wait(ms) {
 }
 
 // name export multiple var and function and should when import use the same name
-export { startBrowserAndPage, optimizePageLoad, saveToJson, getUserInput, wait };
+export { startBrowserAndPage, optimizePageLoad, saveToJson, getUserInput, wait, saveToHtmlFile };

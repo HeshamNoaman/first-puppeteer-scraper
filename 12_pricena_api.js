@@ -1,6 +1,5 @@
 import axios from 'axios';
-import fs from 'fs';
-import { saveToJson } from './utils/puppeteerUtils.js';
+import { saveToJson , saveToHtmlFile} from './utils/puppeteerUtils.js';
 
 const categoryUrl = 'https://sa.pricenacdn.com/js/cattree_ar.json';
 
@@ -23,7 +22,7 @@ const main = async () => {
     const proResponse = await axios.get(productsUrl);
 
     // save data to html file
-    saveToHtmlFile(proResponse.data.products)
+    saveToHtmlFile(proResponse.data.products, "./output/pricena_products.html");
 
   } catch (error) {
     console.log(`error fetching the data ${error.message} `);
@@ -32,13 +31,6 @@ const main = async () => {
 
 }
 
-// Write the HTML content to a file
-function saveToHtmlFile(content) {
 
-  fs.writeFile('./output/pricena_products.html', content, (err) => {
-    if (err) throw err;
-    console.log('HTML file created successfully.');
-  });
-}
 
 await main();
