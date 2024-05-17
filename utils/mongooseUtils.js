@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Product from "./product.js";
 
 // for remote uri provide your url
-import uri from "../output/config.js";
+// import uri from "../output/config.js";
 
 // local uri
 const localUri = 'mongodb://localhost:27017';
@@ -15,7 +15,7 @@ const options = {
 const insertProducts = async (products) => {
     try {
         // connect to mongodb
-        await mongoose.connect(uri, options);
+        await mongoose.connect(localUri, options);
 
         // insertMany record into employee
         const insertedProducts = await Product.insertMany(products);
@@ -36,7 +36,7 @@ const insertProducts = async (products) => {
 const searchProductsByName = async (productName) => {
     try {
         // connect to mongodb
-        await mongoose.connect(uri, options);
+        await mongoose.connect(localUri, options);
 
         // Use a regular expression to perform a case-insensitive search
         const regex = new RegExp(productName, 'i');

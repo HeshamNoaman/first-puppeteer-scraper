@@ -4,17 +4,17 @@ import { insertProducts } from "./utils/mongooseUtils.js";
 
 const apiKey = 'af1b13cfdc69ebf18c5980f2c6afff4d';
 const appId = 'ML6PM6JWSI';
-const algoliaAgent = 'Algolia%20for%20JavaScript%20(4.5.1)%3B%20Browser%20(lite)';
+const algoliaAgent = 'Algolia for JavaScript (4.5.1); Browser (lite)';
 
 // the website url: https://www.extra.com/ar-sa/mobiles-tablets/mobiles/smartphone/c/2-212-3/facet/?q=:relevance:inStock:true&text=&pageSize=48&pg=2&sort=relevance
 
 const url = `https://ml6pm6jwsi-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=${algoliaAgent}&x-algolia-api-key=${apiKey}&x-algolia-application-id=${appId}`;
 
 let nbPages = 0;
-let currentPage = 1;
+let currentPage = 0;
 
 let nbHits = 0;
-let hitsPerPage = 48;
+let hitsPerPage = 96;
 
 let extracted_info = [];
 
@@ -23,15 +23,16 @@ let data = {
         {
             indexName: 'prod_sa_product_index',
             query: '',
-            params: `optionalFilters=%5B%22sellingOutFastCities%3ASA-riyadh%3Cscore%3D5%3E%22%2C%22inStockCities%3ASA-riyadh%3Cscore%3D5%3E%22%5D`
-                + `&facetFilters=%5B%5B%22inStock%3ASA-riyadh_inStock%22%5D%5D&facets=%5B%22productFeaturesAr.*%22%2C%22brandAr%22%2C%22subFamilyAr%22%2C%22rating`
-                + `%22%2C%22productStatusAr%22%2C%22price%22%2C%22offersFacet%22%2C%22inStock%22%2C%22hasFreeGifts%22%2C%22familyAr%22%2C%22deliveryFacet%22%5D`
-                + `&hitsPerPage=${hitsPerPage}&page=${currentPage}&getRankingInfo=1&clickAnalytics=true&filters=categories%3A2-212-3`,
+            params:
+                `optionalFilters=["sellingOutFastCities:SA-riyadh<score=5>","inStockCities:SA-riyadh<score=5>"]`
+                + `&facetFilters=[["inStock:SA-riyadh_inStock"]]`
+                + `&facets=["productFeaturesAr.*", "brandAr", "subFamilyAr", "rating","productStatusAr","price","offersFacet","inStock","hasFreeGifts","familyAr","deliveryFacet"]`
+                + `&hitsPerPage=${hitsPerPage}&page=${currentPage}&getRankingInfo=1&clickAnalytics=true&filters=categories:2-212-3`
         },
         {
             indexName: 'prod_sa_product_index',
             query: '',
-            params: `hitsPerPage=${hitsPerPage}&responseFields=%5B%22facets%22%5D&facets=inStock&filters=categories%3A2-212-3`,
+            params: `hitsPerPage=${hitsPerPage}&responseFields=["facets"]&facets=inStock&filters=categories:2-212-3`,
         },
     ],
 };
@@ -84,7 +85,7 @@ async function fetchCurrentPageData() {
 make a run function to make more than on request until get all data
 base on the following data get it from the first request:
 "nbHits": 452,
-"page": 1,
+"page": 0,
 "nbPages": 10,
 "hitsPerPage": 48,
 */
