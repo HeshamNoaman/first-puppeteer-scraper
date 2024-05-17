@@ -26,11 +26,18 @@ const getCookies = async () => {
         await browser.close();
 
         // Format cookies for Axios request
-        const formattedCookies = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
+        // const formattedCookies = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
+
+        // or use this to get only the needed cookie (handshake)
+        const handshakeCookie = cookies.find(cookie => cookie.name === "handshake");
+
+        // Get the handshake value if the handshake cookie is found
+        const formattedHandshakeCookie = handshakeCookie ? `${handshakeCookie.name}=${handshakeCookie.value}` : null;
 
         saveToJson(cookies, "./output/cookies.json");
 
-        return formattedCookies;
+        // return formattedCookies;
+        return formattedHandshakeCookie;
 
     } catch (error) {
         console.log(`Error fetching the data: ${error.message}`);

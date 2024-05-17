@@ -11,6 +11,7 @@ async function startBrowserAndPage(pageURL, allowedResourceTypes = null, useUser
         headless: false,
         defaultViewport: null,
         // for deployment args
+        /*
         arguments: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -20,6 +21,7 @@ async function startBrowserAndPage(pageURL, allowedResourceTypes = null, useUser
             '--no-zygote',
             '--disable-gpu',
         ]
+        */
     };
 
     // Set the userDataDir
