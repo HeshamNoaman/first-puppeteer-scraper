@@ -7,8 +7,11 @@ const appId = 'ML6PM6JWSI';
 const algoliaAgent = 'Algolia for JavaScript (4.5.1); Browser (lite)';
 
 // the website url: https://www.extra.com/ar-sa/mobiles-tablets/mobiles/smartphone/c/2-212-3/facet/?q=:relevance:inStock:true&text=&pageSize=48&pg=2&sort=relevance
+// https://ml6pm6jwsi-2.algolianet.com/1/indexes/*/queries
 
-const url = `https://ml6pm6jwsi-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=${algoliaAgent}&x-algolia-api-key=${apiKey}&x-algolia-application-id=${appId}`;
+const oldDNS = 'ml6pm6jwsi-dsn.algolia.net';
+const newDNS = 'ml6pm6jwsi-2.algolianet.com';
+const url = `https://${newDNS}/1/indexes/*/queries?x-algolia-agent=${algoliaAgent}&x-algolia-api-key=${apiKey}&x-algolia-application-id=${appId}`;
 
 let nbPages = 0;
 let currentPage = 0;
@@ -17,6 +20,7 @@ let nbHits = 0;
 let hitsPerPage = 96;
 
 let extracted_info = [];
+let rowData = [];
 
 let data = {
     requests: [
@@ -38,6 +42,8 @@ let data = {
 };
 
 function extractData(result) {
+
+    rowData.push(result);
 
     const domain = 'https://www.extra.com';
 
@@ -117,5 +123,7 @@ await run();
 // save the modified response to json file
 saveToJson(extracted_info, './output/extra_product_organized.json');
 
+saveToJson(rowData, './output/extra_product_raw.json');
+
 // save data to mongodb
-insertProducts(extracted_info);
+// insertProducts(extracted_info);
