@@ -124,3 +124,5 @@ extractProductInfo(url)
     .catch(error => {
         saveToJson({ error: error.message }, 'error.json');
     });
+
+    // unnsseccary
