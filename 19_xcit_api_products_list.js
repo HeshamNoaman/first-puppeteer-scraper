@@ -15,7 +15,8 @@ let currentPage = 0;
 
 let nbHits = 0;
 // let hitsPerPage = 96;
-let hitsPerPage = 60;
+// let hitsPerPage = 60;
+let hitsPerPage = 750;
 
 let extracted_info = [];
 let rowData = [];

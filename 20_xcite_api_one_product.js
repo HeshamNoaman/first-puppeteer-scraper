@@ -1,12 +1,18 @@
 import axios from "axios";
 import { saveToJson } from "./utils/puppeteerUtils.js";
 
-const rewriteUrl = 'apple-iphone-15-pro-max-6-7-inch-512gb-8gb-ram-5g-natural'
+const rewriteUrl = 'apple-iphone-15-pro-max-6-7-inch-256gb-8gb-ram-5g-white-1'
 
-let productUrl = `https://www.xcite.com/_next/data/XVlWTKDITsUA1CNdbHuMe/ar-KW/product/${rewriteUrl}.json`;
+// Rqth9ikVqejiAgY3yYhpR
+let productUrl1 = `https://www.xcite.com/_next/data/rEZoSFedURJ13gaLDCUVY/ar-KW/product/${rewriteUrl}.json`;
 
-//  convert the fetch to axios
-const response = await axios.get(productUrl);
+try {
+    //  convert the fetch to axios
+    const response = await axios.get(productUrl);
+    
+    // save the product to json file
+    saveToJson(response.data, "./output/xcite_one_product.json");
 
-// save the product to json file
-saveToJson(response.data, "./output/xcite_one_product.json");
+} catch (err) {
+    saveToJson(err, "./output/xcite_error.json");
+}
