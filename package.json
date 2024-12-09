@@ -10,13 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jsdom": "^24.0.0",
-    "axios": "^1.7.4",
-    "cheerio": "^1.0.0-rc.12",
-    "express": "^4.19.2",
-    "mongoose": "^8.3.4",
-    "puppeteer": "^22.7.1",
-    "set-cookie-parser": "^2.6.0"
+    "jsdom": "^25.0.1",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "express": "^4.21.2",
+    "mongoose": "^8.8.4",
+    "puppeteer": "^23.10.1",
+    "set-cookie-parser": "^2.7.1"
   },
   "type": "module",
   "types": "module"
